@@ -36,6 +36,11 @@ void setup() {
 
 void loop() {
     // Update PID at 10kHz
+    int UD_pot = analogRead(1);
+    	int LR_pot = analogRead(2);
+	Serial.println("LR: " + String(LR_pot) + ", UD: " + String(UD_pot));
+	delay(100);
+
     EVERY_N_MICROS(100) {
         currentPidLoopStartTime = micros(); // Record start time of current PID loop
 
@@ -47,7 +52,7 @@ void loop() {
         pidLoopIntervalCount++;
 
         // PID control logic
-        setpoint = PI * sin(2*(millis() / 1000.0));
+        setpoint = UD_pot * (2 * PI / 4095.0);
         position = encoder.getPosition();
         velocity = encoder.getVelocity();
         controlEffort = motorPID.calculateParallel(setpoint, position);
